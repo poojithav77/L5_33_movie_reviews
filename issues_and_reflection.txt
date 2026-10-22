@@ -1,56 +1,71 @@
 # Lab 5: Static Code Analysis
+## Movie Reviews Project
 
-## 1. Issues Identified and Fixes Applied
+### 1. Objective
 
-| No. | Issue | Description | Fix Applied |
-|---|---|---|---|
-| 1 | Hardcoded secret | Moderator password was directly written in the source code. | Read the password from an environment variable. |
-| 2 | Insecure host configuration | The streaming host was set to `0.0.0.0`, which exposes the service on all network interfaces if used to bind a server. | Changed the host to `127.0.0.1` for local-only use. |
-| 3 | Weak hash algorithm | MD5 was used to generate review identifiers. | Replaced MD5 with SHA-256. |
-| 4 | Non-cryptographic random selection | The standard `random` module was used to select the featured movie. | Used `secrets.choice()` instead. |
-| 5 | Invalid movie handling | Rating a movie that does not exist could cause an error. | Added a check for the movie's existence. |
-| 6 | Naming conventions | Function names did not follow Python's usual naming style. | Changed function names to lowercase words separated by underscores. |
-| 7 | Global statement | The featured-movie function modified a global variable. | Removed the global variable and returned the selected movie instead. |
-| 8 | Formatting and readability | Some statements and spacing did not follow standard Python style. | Improved spacing, line breaks, and code structure. |
-| 9 | Missing documentation | Functions lacked docstrings. | Added docstrings to functions. |
-| 10 | Missing final newline | The file did not end with a newline. | Added a final newline. |
+The objective of this lab is to perform static code analysis on a Python program using Pylint, Bandit, and Flake8. These tools help identify code quality problems, potential security vulnerabilities, and formatting errors. The identified issues were corrected, and the tools were run again to verify the improvements.
 
-Note: Verify original line numbers against `movie_reviews_original.py` before adding line numbers to the final submission.
+### 2. Tools Used
 
-## 2. Before-and-After Analysis
+1. **Pylint:** Checks Python code quality, naming conventions, documentation, and programming practices.
+2. **Bandit:** Identifies potential security issues in Python code.
+3. **Flake8:** Checks Python code for style and formatting violations.
 
-- **Pylint:** Improved from 5.47/10 initially to 10.00/10 in the final report.
-- **Bandit:** Final report identified no issues.
-- **Flake8:** Final report contained no reported errors.
+### 3. Issue Table
 
-## 3. Reflection
+| No. | Original Line Number | Issue Identified | Tool / Method | Fix Applied |
+|---:|---|---|---|---|
+| 1 | 6 | Moderator password was hardcoded in the source code. | Manual security review | Replaced the hardcoded password with an environment variable using `os.environ.get()`. |
+| 2 | 4 | The host was set to `0.0.0.0`, which listens on all network interfaces. | Manual security review | Changed the host to `127.0.0.1` for local-only access in the demonstration. |
+| 3 | 46 | MD5 was used to generate a review identifier. | Manual security review | Replaced MD5 with SHA-256. |
+| 4 | 41 | `random.choice()` was used to select a featured movie. | Manual security review | Replaced it with `secrets.choice()`. |
+| 5 | 20 | The program did not check whether a movie existed before adding a rating. | Manual code review | Added a movie-existence check and returned `False` if the movie was not found. |
+| 6 | 11, 16, 26, 34, 39, 45, 48, 54 | Function names did not follow the recommended snake_case convention. | Pylint / code review | Renamed functions, for example, `addMovie()` to `add_movie()` and `averageRating()` to `average_rating()`. |
+| 7 | 40 | A global variable was used to store the featured movie. | Pylint / code review | Removed the global variable and returned the selected movie directly. |
+| 8 | 52–55 | The original code had inconsistent spacing and formatting. | Flake8 / code review | Improved spacing, indentation, and formatting. |
+| 9 | Multiple lines | Functions lacked explanatory docstrings. | Pylint | Added docstrings to explain the purpose of the functions. |
+| 10 | End of file | The original file needed a final newline. | Flake8 / code review | Ensured that the file ends with a newline. |
 
-### Q1. What is static code analysis?
+**Note:** Line numbers refer to the original code shared during the lab and should be checked against `movie_reviews_original.py`. Some issues were identified through manual code review; do not assume every issue was reported automatically by the listed tool.
 
-Static code analysis examines source code without executing the program. It helps identify coding-style problems, potential bugs, and security issues.
+### 4. Reflection Questions and Answers
 
-### Q2. What is the purpose of Pylint?
+**Q1. What is static code analysis?**
 
-Pylint checks Python code for errors, naming conventions, code quality, and maintainability. It also provides a code-quality score.
+Static code analysis is the process of examining source code without running the program. It helps identify potential bugs, security problems, coding standard violations, and formatting issues.
 
-### Q3. What is the purpose of Bandit?
+**Q2. What is the purpose of Pylint?**
 
-Bandit checks Python source code for common security problems, such as hardcoded secrets and unsafe coding practices.
+Pylint checks Python code quality. It identifies issues such as naming convention violations, missing documentation, and other programming practices that can make code harder to maintain. In this lab, the final Pylint score was 10.00/10.
 
-### Q4. What is the purpose of Flake8?
+**Q3. What is the purpose of Bandit?**
 
-Flake8 checks Python code for style violations and common formatting problems.
+Bandit checks Python source code for common potential security vulnerabilities. In this lab, security-related improvements included removing the hardcoded password, replacing MD5 with SHA-256, and using `secrets.choice()` for selecting the featured movie. The final Bandit report identified no issues.
 
-### Q5. What improvements were made?
+**Q4. What is the purpose of Flake8?**
 
-The program was updated to improve naming conventions, documentation, error handling, hashing, random selection, host configuration, and formatting.
+Flake8 checks Python code for style and formatting problems, including whitespace, indentation, and line-length violations. After the corrections, the final Flake8 report contained no errors.
 
-### Q6. What did I learn?
+**Q5. What improvements were made to the program?**
 
-I learned how to use Pylint, Bandit, and Flake8 to identify code-quality and security problems. I also learned how to correct issues, generate reports, and track changes using Git commits.
+The program was improved by replacing the hardcoded password with an environment variable, changing the listening host to `127.0.0.1`, replacing MD5 with SHA-256, using `secrets.choice()`, validating whether a movie exists before accepting a rating, following snake_case naming conventions, removing unnecessary global state, adding docstrings, and improving formatting.
 
-## 4. Git Commit History
+**Q6. What did you learn from this lab?**
 
-1. `52de76a` — Add original code and baseline analysis reports
-2. `d0736e8` — Fix code quality and security issues
-3. `67de2d4` — Add final static analysis reports
+I learned that static analysis tools help improve code quality, readability, and security before a program is executed or deployed. I also learned that different tools focus on different areas: Pylint focuses on code quality, Bandit focuses on potential security issues, and Flake8 focuses on coding style and formatting. Using all three provides a more complete review of a Python program.
+
+### 5. Final Analysis Results
+
+The corrected program was tested by running it and checking the outputs. The program displayed movie ratings, top movies, a featured movie, a review identifier, the streaming address, and the list of genres. An invalid rating of 6 was rejected with the message that ratings must be between 1 and 5.
+
+The final static analysis results were:
+
+- **Pylint:** 10.00/10
+- **Bandit:** No issues identified
+- **Flake8:** No errors reported
+
+These results indicate that the corrected code passed the recorded final checks for code quality, Bandit security findings, and Flake8 formatting.
+
+### 6. Conclusion
+
+This lab demonstrated how static code analysis can be used to identify and correct code quality, security, and formatting problems in a Python program. After making the corrections, the program ran successfully, Pylint achieved a score of 10.00/10, Bandit reported no issues, and Flake8 reported no errors. The lab highlighted the importance of reviewing code systematically and following secure coding and Python style practices.
