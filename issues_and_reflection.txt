@@ -1,0 +1,56 @@
+# Lab 5: Static Code Analysis
+
+## 1. Issues Identified and Fixes Applied
+
+| No. | Issue | Description | Fix Applied |
+|---|---|---|---|
+| 1 | Hardcoded secret | Moderator password was directly written in the source code. | Read the password from an environment variable. |
+| 2 | Insecure host configuration | The streaming host was set to `0.0.0.0`, which exposes the service on all network interfaces if used to bind a server. | Changed the host to `127.0.0.1` for local-only use. |
+| 3 | Weak hash algorithm | MD5 was used to generate review identifiers. | Replaced MD5 with SHA-256. |
+| 4 | Non-cryptographic random selection | The standard `random` module was used to select the featured movie. | Used `secrets.choice()` instead. |
+| 5 | Invalid movie handling | Rating a movie that does not exist could cause an error. | Added a check for the movie's existence. |
+| 6 | Naming conventions | Function names did not follow Python's usual naming style. | Changed function names to lowercase words separated by underscores. |
+| 7 | Global statement | The featured-movie function modified a global variable. | Removed the global variable and returned the selected movie instead. |
+| 8 | Formatting and readability | Some statements and spacing did not follow standard Python style. | Improved spacing, line breaks, and code structure. |
+| 9 | Missing documentation | Functions lacked docstrings. | Added docstrings to functions. |
+| 10 | Missing final newline | The file did not end with a newline. | Added a final newline. |
+
+Note: Verify original line numbers against `movie_reviews_original.py` before adding line numbers to the final submission.
+
+## 2. Before-and-After Analysis
+
+- **Pylint:** Improved from 5.47/10 initially to 10.00/10 in the final report.
+- **Bandit:** Final report identified no issues.
+- **Flake8:** Final report contained no reported errors.
+
+## 3. Reflection
+
+### Q1. What is static code analysis?
+
+Static code analysis examines source code without executing the program. It helps identify coding-style problems, potential bugs, and security issues.
+
+### Q2. What is the purpose of Pylint?
+
+Pylint checks Python code for errors, naming conventions, code quality, and maintainability. It also provides a code-quality score.
+
+### Q3. What is the purpose of Bandit?
+
+Bandit checks Python source code for common security problems, such as hardcoded secrets and unsafe coding practices.
+
+### Q4. What is the purpose of Flake8?
+
+Flake8 checks Python code for style violations and common formatting problems.
+
+### Q5. What improvements were made?
+
+The program was updated to improve naming conventions, documentation, error handling, hashing, random selection, host configuration, and formatting.
+
+### Q6. What did I learn?
+
+I learned how to use Pylint, Bandit, and Flake8 to identify code-quality and security problems. I also learned how to correct issues, generate reports, and track changes using Git commits.
+
+## 4. Git Commit History
+
+1. `52de76a` — Add original code and baseline analysis reports
+2. `d0736e8` — Fix code quality and security issues
+3. `67de2d4` — Add final static analysis reports
